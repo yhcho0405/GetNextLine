@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:33 by youncho           #+#    #+#             */
-/*   Updated: 2020/11/22 16:37:16 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/24 09:25:09 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,21 @@
 # include <unistd.h>
 # include <limits.h>
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4096
-# endif
-
 # define R_ERR -1
 # define R_EOF 0
 # define R_NL 1
 
-int get_next_line(int fd, char **line);
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
+
+typedef struct	s_buffer
+{
+	char		*buf;
+	char		*pre;
+}				t_buffer;
+
+
+int				get_next_line(int fd, char **line);
 
 #endif

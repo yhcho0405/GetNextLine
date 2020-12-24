@@ -6,28 +6,26 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/08 14:43:15 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/24 09:50:05 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int make_line_trim_buf(char *buf, char **line, int ret)
+void store_buffer(t_buffer storage, char *buff)
 {
 
-	return (ret);
 }
 
-int		get_next_line(int fd, char **line);
+int		get_next_line(int fd, char **line)
 {
-	static char	*buf[OPEN_MAX];
-	char		buffer[BUFFER_SIZE + 1];
-	size_t		len;
+	static t_buffer	storage[OPEN_MAX];
+	char			buff[BUFFER_SIZE + 1];
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
 		return (R_ERR);
-	while (ft_strchr(buf[fd], "\n") && 0 < (len = read(fd, &buffer, BUFFER_SIZE)))
+	while (read(fd, buff, BUFFER_SIZE) && !ft_strchr(buff, '\n'))
 	{
-		buf[fd] = ft_strjoin(buf[fd], buffer);
+		store_buffer(storage[fd], buff);
 	}
 }
