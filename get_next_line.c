@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 18:08:19 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:19:16 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		get_next_line(int fd, char **line)
 		return (R_ERR);
 	if ((ret = make_line(fd, line, curr->buff)))
 		return (ret);
-	last_free(fd, &head);
+	last_call_free(fd, &head);
 	return (R_EOF);
 }
 
