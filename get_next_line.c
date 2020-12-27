@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 18:19:16 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/27 22:48:09 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int		store_line(char **line, char *buffer, int i)
 	int j;
 
 	j = 0;
+	ret = 0;
 	while (buffer[j])
 	{
 		(*line)[i] = buffer[j];
@@ -28,11 +29,11 @@ int		store_line(char **line, char *buffer, int i)
 		}
 		i++;
 	}
-	(*line)[i] = (char )0;
+	(*line)[i] = (char)0;
 	i = 0;
 	while (buffer[j])
 		buffer[i++] = buffer[j++];
-	buffer[i] = (char )0;
+	buffer[i] = (char)0;
 	return (ret);
 }
 
@@ -79,7 +80,8 @@ int		get_next_line(int fd, char **line)
 		return (R_ERR);
 	if ((ret = make_line(fd, line, curr->buff)))
 		return (ret);
-	last_call_free(fd, &head);
+	//last_call_free(fd, &head);
+	(*line)[0] = 0;
 	return (R_EOF);
 }
 
@@ -93,7 +95,7 @@ int		get_next_line(int fd, char **line)
 만약 복사 중 개행을 만나지 못하면) read로 BUFFER_SIZE만큼 읽고 3번의 과정을 반복(단 line의 원래 있던 값의 뒤에 복사해야 함)
 read 중 읽은 buffer의 크기가 1보다 작을 때) EOF라고 판단하고 해당 fd의 노드 모두 해제
 */
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -107,12 +109,16 @@ int		main(void)
 //	fd = 0;
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
-		printf("get_next_line : %s\n", line);
-		printf("return value : %d\n\n", ret);
+		printf("%s\n", line);
+		//printf("get_next_line : %s\n", line);
+		//printf("return value : %d\n\n", ret);
 		free(line);
 	}
-	printf("get_next_line : %s\n", line);
-	printf("return value : %d\n", ret);
+	printf("%s\n", line);
+	//printf("get_next_line : %s\n", line);
+	//printf("return value : %d\n", ret);
 	free(line);
+	while (1) {}
 	return (0);
 }
+*/

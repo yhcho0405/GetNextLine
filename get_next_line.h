@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:33 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 17:50:26 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/27 22:22:32 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define R_NL 1
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4096
+#  define BUFFER_SIZE 1024
 # endif
 
 typedef struct			s_storage
@@ -40,5 +40,6 @@ size_t					ft_strlen(const char *str);
 int						set_line_size(char **line, size_t len);
 t_storage				*get_new_node(int fd);
 t_storage				*get_current_node(int fd, t_storage *node);
+void					last_call_free(int fd, t_storage **node);
 
 #endif
