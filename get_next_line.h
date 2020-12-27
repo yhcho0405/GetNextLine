@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:33 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 15:56:18 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/27 17:50:26 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,12 @@ typedef struct			s_storage
 }						t_storage;
 
 int						get_next_line(int fd, char **line);
+int						gnl_init(int fd, char **line, t_storage **head, t_storage **curr);
+int						make_line(int fd, char **line, char *buffer);
+int						store_line(char **line, char *buffer, int i);
+size_t					ft_strlen(const char *str);
+int						set_line_size(char **line, size_t len);
+t_storage				*get_new_node(int fd);
+t_storage				*get_current_node(int fd, t_storage *node);
 
 #endif

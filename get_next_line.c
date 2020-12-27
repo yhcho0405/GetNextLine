@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 17:17:11 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/27 18:08:19 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,14 @@ int		make_line(int fd, char **line, char *buffer)
 
 	if (!(set_line_size(line, (i = 0))))
 		return (R_ERR);
-	if (ret = store_line(line, buffer, i))
+	if ((ret = store_line(line, buffer, i)))
 		return (ret);
 	while ((len = read(fd, buffer, BUFFER_SIZE)) > 0)
 	{
 		buffer[len] = 0;
 		if (!(set_line_size(line, (i = ft_strlen(*line)))))
 			return (R_ERR);
-		if (ret = store_line(line, buffer, i))
+		if ((ret = store_line(line, buffer, i)))
 			return (ret);
 	}
 	return (R_EOF);
@@ -63,7 +63,7 @@ int		gnl_init(int fd, char **line, t_storage **head, t_storage **curr)
 		return (0);
 	if (!*head && !(*head = get_new_node(fd)))
 		return (0);
-	if (!(*curr = get_current_node(fd)))
+	if (!(*curr = get_current_node(fd, *head)))
 		return (0);
 	*line = (char *)0;
 	return (1);
@@ -79,6 +79,7 @@ int		get_next_line(int fd, char **line)
 		return (R_ERR);
 	if ((ret = make_line(fd, line, curr->buff)))
 		return (ret);
+	last_free(fd, &head);
 	return (R_EOF);
 }
 
