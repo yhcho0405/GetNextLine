@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:30 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/30 22:34:32 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/31 01:35:09 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			set_line_size(char **line, size_t len)
 	i = -1;
 	while (++i < len)
 		tmp[i] = (*line)[i];
-	tmp[i] = 0;
+	tmp[i] = (char)0;
 	free(*line);
 	*line = tmp;
 	return (SUCCESS);
@@ -48,7 +48,7 @@ t_storage	*get_new_node(int fd)
 		return (FAIL);
 	ret->fd = fd;
 	ret->next = (t_storage *)0;
-	ret->buff[0] = 0;
+	ret->buff[0] = (char)0;
 	return (ret);
 }
 
@@ -66,19 +66,15 @@ t_storage	*get_current_node(int fd, t_storage *node)
 void		last_call_free(int fd, t_storage **head)
 {
 	t_storage	*prev;
-	t_storage	*curr;
+	t_storage	*del;
 
 	prev = *head;
-	if (prev->fd == fd)
-	{
-		curr = prev->next;
-		free(prev);
-		*head = curr;
-		return ;
-	}
-	while (prev->next->fd != fd)
+	while (prev->next && prev->next->fd != fd)
 		prev = prev->next;
-	curr = get_current_node(fd, *head);
-	prev->next = curr->next;
-	free(curr);
+	del = get_current_node(fd, *head);
+	if ((*head)->fd == fd)
+		*head = del->next;
+	else
+		prev->next = del->next;
+	free(del);
 }

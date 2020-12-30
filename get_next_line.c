@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/30 22:55:24 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/31 01:35:11 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int		read_control(int fd, char **line, char *buffer)
 	{
 		if (!(set_line_size(line, (i = ft_strlen(*line)))))
 			return (R_ERR);
-		if ((ret = make_line(line, buffer, i)))
+		if ((ret = make_line(line, buffer, i))) //개행 있으면 빠져나옴
 			return (ret);
 		len = read(fd, buffer, BUFFER_SIZE);
 		buffer[len] = 0;
@@ -72,10 +72,10 @@ int		get_next_line(int fd, char **line)
 
 	if (gnl_init(fd, line, &head, &curr) == FAIL) //첫 호출 head노드 정의, 현재 fd노드 curr에 저장
 		return (R_ERR);
-	if ((ret = read_control(fd, line, curr->buff))) //개행 전까지 파일 읽고 make_line호출
+	if ((ret = read_control(fd, line, curr->buff))) //남은 버퍼 라인에 담고 개행 나오기 전까지 계속 읽음
 		return (ret);
 	last_call_free(fd, &head); //EOF 만나면 해당 fd노드 모두 해제
-	(*line)[0] = 0;
+	(*line)[0] = (char)0;
 	return (R_EOF);
 }
 /*
