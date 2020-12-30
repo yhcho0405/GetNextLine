@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:33 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 22:22:32 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/30 21:24:32 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 # include <stdlib.h>
 # include <unistd.h>
-# include <limits.h>
 
 # define R_ERR -1
 # define R_EOF 0
 # define R_NL 1
+
+# define FAIL 0
+# define SUCCESS 1
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1024
@@ -33,9 +35,10 @@ typedef struct			s_storage
 }						t_storage;
 
 int						get_next_line(int fd, char **line);
-int						gnl_init(int fd, char **line, t_storage **head, t_storage **curr);
-int						make_line(int fd, char **line, char *buffer);
-int						store_line(char **line, char *buffer, int i);
+int						gnl_init(int fd, char **line, t_storage **head,
+								t_storage **curr);
+int						read_control(int fd, char **line, char *buffer);
+int						make_line(char **line, char *buffer, int i);
 size_t					ft_strlen(const char *str);
 int						set_line_size(char **line, size_t len);
 t_storage				*get_new_node(int fd);

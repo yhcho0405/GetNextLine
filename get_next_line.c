@@ -6,30 +6,26 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 22:48:09 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/30 22:55:24 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		store_line(char **line, char *buffer, int i)
+int		make_line(char **line, char *buffer, int i) //sizing된 line에 buffer에서 개행 전까지 문자를 담고 buffer를 trim한다.
 {
 	int ret;
 	int j;
 
 	j = 0;
 	ret = 0;
-	while (buffer[j])
-	{
-		(*line)[i] = buffer[j];
+	while (((*line)[i++] = buffer[j]))
 		if (buffer[j++] == '\n')
 		{
+			(*line)[--i] = (char)0;
 			ret = 1;
 			break ;
 		}
-		i++;
-	}
-	(*line)[i] = (char)0;
 	i = 0;
 	while (buffer[j])
 		buffer[i++] = buffer[j++];
@@ -37,23 +33,21 @@ int		store_line(char **line, char *buffer, int i)
 	return (ret);
 }
 
-int		make_line(int fd, char **line, char *buffer)
+int		read_control(int fd, char **line, char *buffer)
 {
 	int len;
 	int ret;
 	int i;
 
-	if (!(set_line_size(line, (i = 0))))
-		return (R_ERR);
-	if ((ret = store_line(line, buffer, i)))
-		return (ret);
-	while ((len = read(fd, buffer, BUFFER_SIZE)) > 0)
+	len = 1;
+	while (len > 0)
 	{
-		buffer[len] = 0;
 		if (!(set_line_size(line, (i = ft_strlen(*line)))))
 			return (R_ERR);
-		if ((ret = store_line(line, buffer, i)))
+		if ((ret = make_line(line, buffer, i)))
 			return (ret);
+		len = read(fd, buffer, BUFFER_SIZE);
+		buffer[len] = 0;
 	}
 	return (R_EOF);
 }
@@ -61,13 +55,13 @@ int		make_line(int fd, char **line, char *buffer)
 int		gnl_init(int fd, char **line, t_storage **head, t_storage **curr)
 {
 	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
-		return (0);
+		return (FAIL);
 	if (!*head && !(*head = get_new_node(fd)))
-		return (0);
+		return (FAIL);
 	if (!(*curr = get_current_node(fd, *head)))
-		return (0);
+		return (FAIL);
 	*line = (char *)0;
-	return (1);
+	return (SUCCESS);
 }
 
 int		get_next_line(int fd, char **line)
@@ -76,16 +70,14 @@ int		get_next_line(int fd, char **line)
 	t_storage			*curr;
 	int					ret;
 
-	if (!(ret = gnl_init(fd, line, &head, &curr)))
+	if (gnl_init(fd, line, &head, &curr) == FAIL) //첫 호출 head노드 정의, 현재 fd노드 curr에 저장
 		return (R_ERR);
-	if ((ret = make_line(fd, line, curr->buff)))
+	if ((ret = read_control(fd, line, curr->buff))) //개행 전까지 파일 읽고 make_line호출
 		return (ret);
-	//last_call_free(fd, &head);
+	last_call_free(fd, &head); //EOF 만나면 해당 fd노드 모두 해제
 	(*line)[0] = 0;
 	return (R_EOF);
 }
-
-
 /*
 (이미 읽은 부분은 해제 되었다고 가정)
 1. GNL 첫번째 호출이라면 시작 노드 생성
@@ -95,7 +87,7 @@ int		get_next_line(int fd, char **line)
 만약 복사 중 개행을 만나지 못하면) read로 BUFFER_SIZE만큼 읽고 3번의 과정을 반복(단 line의 원래 있던 값의 뒤에 복사해야 함)
 read 중 읽은 buffer의 크기가 1보다 작을 때) EOF라고 판단하고 해당 fd의 노드 모두 해제
 */
-/*
+
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -121,4 +113,3 @@ int		main(void)
 	while (1) {}
 	return (0);
 }
-*/

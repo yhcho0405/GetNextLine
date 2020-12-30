@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:30 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/27 23:09:12 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/30 22:34:32 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t		ft_strlen(const char *str)
 {
 	size_t len;
 
+	if (!str)
+		return (FAIL);
 	len = 0;
 	while (str[len])
 		len++;
@@ -27,15 +29,15 @@ int			set_line_size(char **line, size_t len)
 	char	*tmp;
 	size_t	i;
 
-	i = -1;
 	if (!(tmp = malloc(BUFFER_SIZE + len + 1)))
-		return (0);
+		return (FAIL);
+	i = -1;
 	while (++i < len)
 		tmp[i] = (*line)[i];
 	tmp[i] = 0;
 	free(*line);
 	*line = tmp;
-	return (1);
+	return (SUCCESS);
 }
 
 t_storage	*get_new_node(int fd)
@@ -43,7 +45,7 @@ t_storage	*get_new_node(int fd)
 	t_storage *ret;
 
 	if (!(ret = malloc(sizeof(t_storage))))
-		return (0);
+		return (FAIL);
 	ret->fd = fd;
 	ret->next = (t_storage *)0;
 	ret->buff[0] = 0;
