@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:30 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/31 01:35:09 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/31 06:21:32 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ t_storage	*get_current_node(int fd, t_storage *node)
 	return (node);
 }
 
-void		last_call_free(int fd, t_storage **head)
+int			deallocation(int fd, t_storage **head, int ret)
 {
 	t_storage	*prev;
 	t_storage	*del;
@@ -77,4 +77,5 @@ void		last_call_free(int fd, t_storage **head)
 	else
 		prev->next = del->next;
 	free(del);
+	return (ret);
 }
