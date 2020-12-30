@@ -6,7 +6,7 @@
 /*   By: youncho <youncho@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/21 17:12:27 by youncho           #+#    #+#             */
-/*   Updated: 2020/12/31 06:21:14 by youncho          ###   ########.fr       */
+/*   Updated: 2020/12/31 08:31:02 by youncho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int		read_control(int fd, char **line, char *buffer)
 	int i;
 
 	len = 1;
+	if (read(fd, buffer, 0) == R_ERR) //invalid fd situation 에서 line에 손대기 전 return
+		return (R_ERR);
 	while (len > 0)
 	{
 		if (!(set_line_size(line, (i = ft_strlen(*line)))))
@@ -55,9 +57,8 @@ int		read_control(int fd, char **line, char *buffer)
 
 int		gnl_init(int fd, char **line, t_storage **head, t_storage **curr)
 {
-	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
-		return (FAIL);
-	if (!*head && !(*head = get_new_node(fd)))
+	if (BUFFER_SIZE <= 0 || fd < 0 || !line ||
+		(!*head && !(*head = get_new_node(fd))))
 		return (FAIL);
 	if (!(*curr = get_current_node(fd, *head)))
 		return (deallocation(fd, head, FAIL));
@@ -97,7 +98,7 @@ int		main(void)
 	int		ret;
 	int		fd;
 
-	fd = open("normal.txt", O_RDONLY);
+	fd = open("normar.rxr", O_RDONLY);
 //	fd = 0;
 	while ((ret = get_next_line(fd, &line)) > 0)
 	{
@@ -113,5 +114,6 @@ int		main(void)
 	//while (1) {}
 	return (0);
 }
+
 
 */
